@@ -1,0 +1,21 @@
+export const siteConfig = {
+  brandName: 'Rais Mughni Salam',
+  displayName: 'Rais Mughni Salam',
+  tagLine: 'Programmer dan web developer dengan pendekatan vibe coding.',
+  siteUrl: 'https://rais-porto-portfolio.vercel.app',
+  intro: 'Rais Mughni Salam adalah programmer dan web developer yang mengeksplorasi ide melalui vibe coding.',
+  profileImage: '/profile/rais-dark-background.jpg',
+  email: 'raismughnisa@gmail.com',
+  resumeUrl: null,
+  splashScreen: true,
+  customCursor: true,
+  reducedMotionFallback: true,
+  accent: '#d6a15b',
+  socials: ['github', 'linkedin', 'instagram'],
+  navigation: [
+    { key: 'home', href: '/' },
+    { key: 'about', href: '/about' },
+    { key: 'projects', href: '/projects' },
+    { key: 'contact', href: '/contact' },
+  ],
+};
