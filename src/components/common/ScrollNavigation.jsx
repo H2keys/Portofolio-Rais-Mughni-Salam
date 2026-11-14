@@ -103,7 +103,7 @@ export function ScrollNavigation({ targetId, labelKey, replay = false }) {
               transition={{ duration: reducedMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="scroll-navigation"
             >
-              <button type="button" onClick={navigate} className="scroll-navigation__button">
+              <button type="button" onClick={navigate} className="scroll-navigation__button" aria-label={t(labelKey)}>
                 <span>{t(labelKey)}</span>
                 <Icon className={replay ? 'scroll-navigation__replay' : ''} size={17} aria-hidden="true" />
               </button>

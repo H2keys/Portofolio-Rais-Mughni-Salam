@@ -39,7 +39,7 @@ export function Hero() {
     <section id="hero-scene" ref={sectionRef} tabIndex={-1} className="cinema-hero relative isolate overflow-hidden" aria-labelledby="hero-title">
       <div className="cinema-hero__texture" aria-hidden="true" />
       <div className="cinema-hero__image-wrap" data-hero-image>
-        <img src={siteConfig.profileImage} alt="Foto Rais Mughni Salam" fetchpriority="high" />
+        <img src={siteConfig.profileImage} alt={t('meta.personImageAlt')} fetchpriority="high" />
       </div>
       <div className="cinema-hero__subject" data-hero-subject aria-hidden="true">
         <img src="/profile/rais-subject.webp" alt="" fetchpriority="high" />

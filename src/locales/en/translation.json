@@ -25,7 +25,8 @@
     "close": "Close",
     "required": "This field is required",
     "invalidEmail": "Enter a valid email address",
-    "allRights": "All rights reserved"
+    "allRights": "All rights reserved",
+    "breadcrumb": "Breadcrumb navigation"
   },
   "home": {
     "intro": "Vibe Coder",
@@ -65,7 +66,7 @@
     "continueGallery": "Continue to contact",
     "continueCertificates": "View certificates",
     "continueContact": "Continue to Contact",
-    "replayJourney": "Replay the journey"
+    "replayJourney": "Restart the journey"
   },
   "about": {
     "title": "About me",
@@ -92,6 +93,8 @@
     "coverAlt": "project cover",
     "preview": "Project preview",
     "imageUnavailable": "Preview image is not available",
+    "projectNotFound": "Project not found",
+    "zoom": "Zoom preview",
     "overview": "Overview",
     "description": "About the project",
     "features": "Key features",
@@ -107,6 +110,7 @@
   "contact": {
     "title": "Contact",
     "subtitle": "Contact me by email or through any of the social links below.",
+    "socialNavigation": "Contact and social links",
     "formTitle": "Send a message",
     "success": "Your message was sent successfully. I’ll be in touch soon.",
     "error": "Your message could not be sent. Please contact me directly by email.",

@@ -1,4 +1,5 @@
 import { Github, Instagram, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { socialLinks } from '../../data/socialLinks';
 
 const icons = {
@@ -10,8 +11,10 @@ const icons = {
 };
 
 export function SocialLinks({ className = '' }) {
+  const { t } = useTranslation();
+
   return (
-    <nav className={className} aria-label="Kontak dan media sosial">
+    <nav className={className} aria-label={t('contact.socialNavigation')}>
       {Object.entries(socialLinks).map(([key, social]) => {
         const Icon = icons[key];
         const isEmail = key === 'email';

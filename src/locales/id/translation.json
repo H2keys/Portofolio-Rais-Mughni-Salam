@@ -25,7 +25,8 @@
     "close": "Tutup",
     "required": "Wajib diisi",
     "invalidEmail": "Format email tidak valid",
-    "allRights": "Hak cipta dilindungi undang-undang"
+    "allRights": "Hak cipta dilindungi undang-undang",
+    "breadcrumb": "Navigasi halaman"
   },
   "home": {
     "intro": "Vibe Coder",
@@ -65,7 +66,7 @@
     "continueGallery": "Lanjut ke kontak",
     "continueCertificates": "Lihat sertifikat",
     "continueContact": "Lanjut ke Kontak",
-    "replayJourney": "Ulangi perjalanan"
+    "replayJourney": "Mulai ulang perjalanan"
   },
   "about": {
     "title": "Tentang saya",
@@ -92,6 +93,8 @@
     "coverAlt": "sampul proyek",
     "preview": "Pratinjau proyek",
     "imageUnavailable": "Gambar pratinjau belum tersedia",
+    "projectNotFound": "Proyek tidak ditemukan",
+    "zoom": "Perbesar pratinjau",
     "overview": "Ikhtisar",
     "description": "Tentang proyek",
     "features": "Fitur utama",
@@ -107,6 +110,7 @@
   "contact": {
     "title": "Kontak",
     "subtitle": "Silakan hubungi saya melalui email atau media sosial yang tersedia.",
+    "socialNavigation": "Kontak dan media sosial",
     "formTitle": "Kirim pesan",
     "success": "Pesan berhasil dikirim. Saya akan segera membalasnya.",
     "error": "Pesan belum dapat dikirim. Silakan hubungi saya langsung melalui email.",
@@ -155,6 +159,6 @@
     "contactTitle": "Kontak",
     "contactDescription": "Hubungi Rais Mughni Salam melalui email, LinkedIn, GitHub, Instagram, atau formulir kontak.",
     "notFoundTitle": "Halaman tidak ditemukan",
-    "personImageAlt": "Rais Mughni Salam, programmer dan web developer"
+    "personImageAlt": "Rais Mughni Salam, programmer dan pengembang web"
   }
 }

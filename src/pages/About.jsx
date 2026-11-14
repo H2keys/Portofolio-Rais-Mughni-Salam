@@ -27,7 +27,7 @@ export default function About() {
       <section className="py-12 sm:py-16">
         <Container className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <figure className="relative m-0 h-[320px] overflow-hidden border border-white/10 sm:h-[420px]">
-            <img src={siteConfig.profileImage} alt="Foto Rais Mughni Salam" className="h-full w-full object-cover" />
+            <img src={siteConfig.profileImage} alt={t('meta.personImageAlt')} className="h-full w-full object-cover" />
           </figure>
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-[#d6a15b]">{siteConfig.brandName}</p>

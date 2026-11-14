@@ -24,12 +24,12 @@ export default function ProjectDetail() {
           backTo="/projects"
           backLabelKey="common.backProjects"
           eyebrow="404"
-          title="Project not found"
+          title={t('projects.projectNotFound')}
         />
         <section className="py-20">
           <Container className="rounded-[30px] border border-white/10 bg-[#0f0f0f] p-10 text-center">
             <p className="text-xs uppercase tracking-[0.28em] text-[#d6a15b]">404</p>
-            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-[#f7f5f1]">Project not found</h1>
+            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-[#f7f5f1]">{t('projects.projectNotFound')}</h1>
             <div className="mt-6 inline-flex">
               <Button as="link" to="/projects" variant="secondary">{t('common.backProjects')}</Button>
             </div>
@@ -124,7 +124,7 @@ export default function ProjectDetail() {
               />
               <span className="project-detail__hero-hint">
                 <Maximize2 size={13} aria-hidden="true" />
-                <span>Zoom</span>
+                <span>{t('projects.zoom')}</span>
               </span>
             </button>
           </figure>

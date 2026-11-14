@@ -33,11 +33,12 @@ describe('portfolio app', () => {
     expect(document.querySelector('[data-hero-subject] img')).toHaveAttribute('src', '/profile/rais-subject.webp');
     expect(screen.getByRole('heading', { name: /karya terpilih/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Pendidikan dan Pengalaman/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('navigation', { name: 'Kontak dan media sosial' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('heading', { name: 'Kemampuan' }).length).toBeGreaterThan(0);
     expect(screen.getByText('Tentang Saya')).toBeInTheDocument();
     expect(screen.getByLabelText('Saya lulusan Program Studi Informatika di Universitas Sebelas April yang adaptif, disiplin, dan memiliki integritas tinggi.')).toBeInTheDocument();
     expect(screen.getByText('Portofolio ini mendokumentasikan beberapa proyek web yang saya kerjakan, pengalaman yang saya peroleh, dan kemampuan yang saya kuasai.')).toBeInTheDocument();
-    screen.getAllByRole('img', { name: 'Foto Rais Mughni Salam' }).forEach((image) => {
+    screen.getAllByRole('img', { name: 'Rais Mughni Salam, programmer dan pengembang web' }).forEach((image) => {
       expect(image).toHaveAttribute('src', '/profile/rais-dark-background.jpg');
     });
     ['Pengembangan Web Front-End', 'Vibe Coding', 'React.js', 'Python', 'Microsoft Office', 'Visualisasi Data', 'Analisis Data', 'UI/UX'].forEach((skill) => {
@@ -89,6 +90,12 @@ describe('portfolio app', () => {
       expect(document.querySelector('meta[property="og:type"]')).toHaveAttribute('content', 'article');
       expect(document.querySelector('script#structured-data')).toHaveTextContent('"@type":"CreativeWork"');
     });
+    expect(screen.getByText('Perbesar pratinjau')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Navigasi halaman' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'en' }));
+    expect(screen.getByText('Zoom preview')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Breadcrumb navigation' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'id' }));
     expect(screen.getByText('2026')).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /Lihat demo langsung/i }).some((link) => (
       link.getAttribute('href') === 'https://my-pertamina-dashboard-analisis.vercel.app/'
@@ -115,10 +122,22 @@ describe('portfolio app', () => {
     expect(await screen.findByRole('heading', { name: /Rais Mughni Salam/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('link', { name: /About me/i }));
     expect(await screen.findByText('Bachelor of Informatics')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Rais Mughni Salam, programmer and web developer' })).toBeInTheDocument();
     expect(screen.getByText('Data Analysis')).toBeInTheDocument();
     expect(screen.getAllByText('Experience').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Education').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Social Media').length).toBeGreaterThan(0);
     expect(screen.getByText('February 2024')).toBeInTheDocument();
+  });
+
+  it('localizes the missing project page', async () => {
+    localStorage.setItem('porto-language', 'id');
+    window.history.replaceState({}, '', '/projects/not-a-real-project');
+
+    render(<App />);
+
+    expect(await screen.findAllByRole('heading', { name: 'Proyek tidak ditemukan' })).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', { name: 'en' }));
+    expect(await screen.findAllByRole('heading', { name: 'Project not found' })).toHaveLength(2);
   });
 });

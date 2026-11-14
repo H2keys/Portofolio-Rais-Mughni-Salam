@@ -53,7 +53,7 @@ export function AboutPreview() {
     <section id="about-story" ref={sectionRef} tabIndex={-1} className="about-story" aria-labelledby="about-story-title">
       <Container className="about-story__layout">
         <div className="about-story__portrait-wrap">
-          <img data-about-image src={siteConfig.profileImage} alt="Foto Rais Mughni Salam" loading="lazy" />
+          <img data-about-image src={siteConfig.profileImage} alt={t('meta.personImageAlt')} loading="lazy" />
         </div>
         <div className="about-story__copy">
           <p className="scene-kicker">{t('home.aboutPreview')}</p>
