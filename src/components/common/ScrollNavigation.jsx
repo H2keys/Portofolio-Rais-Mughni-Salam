@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowRight, RotateCcw } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -19,10 +19,18 @@ export function ScrollNavigation({ targetId, labelKey, replay = false, to, alway
   const navigateToRoute = useNavigate();
   const slotRef = useRef(null);
   const popupRef = useRef(null);
+  const scrollProgressRef = useRef(0);
   const instanceId = useId();
   const [visible, setVisible] = useState(alwaysVisible);
   const [pointerNear, setPointerNear] = useState(false);
   const Icon = to ? ArrowRight : replay ? RotateCcw : ArrowDown;
+
+  const setPopupRef = useCallback((element) => {
+    popupRef.current = element;
+    if (element) {
+      gsap.set(element, { '--scroll-progress': scrollProgressRef.current });
+    }
+  }, []);
 
   useEffect(() => {
     if (alwaysVisible) return undefined;
@@ -59,6 +67,32 @@ export function ScrollNavigation({ targetId, labelKey, replay = false, to, alway
       window.removeEventListener('pointerleave', handleWindowLeave);
     };
   }, [visible]);
+
+  useGSAP(() => {
+    const updateProgress = (self) => {
+      scrollProgressRef.current = self.progress;
+      if (popupRef.current) {
+        gsap.set(popupRef.current, { '--scroll-progress': self.progress });
+      }
+    };
+
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: updateProgress,
+      onRefresh: updateProgress,
+    });
+
+    const handleScrollLock = (event) => {
+      if (event.detail?.locked) return;
+      window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        ScrollTrigger.update();
+      });
+    };
+    document.addEventListener('porto:scroll-lock', handleScrollLock);
+    return () => document.removeEventListener('porto:scroll-lock', handleScrollLock);
+  }, { revertOnUpdate: true });
 
   useGSAP(() => {
     if (alwaysVisible || !slotRef.current) return;
@@ -127,7 +161,7 @@ export function ScrollNavigation({ targetId, labelKey, replay = false, to, alway
         <AnimatePresence initial={false}>
           {visible && (
             <motion.div
-              ref={popupRef}
+              ref={setPopupRef}
               key="scroll-navigation"
               initial={reducedMotion ? false : { opacity: 0, y: 18, scale: 0.96 }}
               animate={{ opacity: pointerNear ? 1 : 0.6, y: 0, scale: 1 }}
@@ -140,6 +174,8 @@ export function ScrollNavigation({ targetId, labelKey, replay = false, to, alway
               onFocusCapture={() => setPointerNear(true)}
               className="scroll-navigation"
             >
+              <span className="scroll-navigation__progress-edge scroll-navigation__progress-edge--left" aria-hidden="true" />
+              <span className="scroll-navigation__progress-edge scroll-navigation__progress-edge--right" aria-hidden="true" />
               <button type="button" onClick={navigate} className="scroll-navigation__button" aria-label={t(labelKey)}>
                 <span>{t(labelKey)}</span>
                 <Icon className={replay ? 'scroll-navigation__replay' : ''} size={17} aria-hidden="true" />

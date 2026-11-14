@@ -27,6 +27,7 @@ describe('ScrollNavigation', () => {
     const popup = document.querySelector('.scroll-navigation');
     expect(screen.getByRole('button', { name: 'Mulai Perjalanan' })).toBeInTheDocument();
     expect(popup).toHaveStyle({ opacity: '0.6' });
+    expect(popup.querySelectorAll('.scroll-navigation__progress-edge')).toHaveLength(2);
 
     fireEvent.click(screen.getByRole('button', { name: 'Mulai Perjalanan' }));
     await waitFor(() => expect(screen.getByTestId('current-path')).toHaveTextContent('/'));

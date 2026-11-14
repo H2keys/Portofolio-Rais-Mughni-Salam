@@ -124,6 +124,27 @@ textarea {
   pointer-events: auto;
 }
 
+.scroll-navigation__progress-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 1px;
+  background: var(--accent);
+  transform: scaleY(var(--scroll-progress, 0));
+  transform-origin: bottom center;
+  transition: transform 180ms linear;
+  pointer-events: none;
+}
+
+.scroll-navigation__progress-edge--left {
+  left: 0;
+}
+
+.scroll-navigation__progress-edge--right {
+  right: 0;
+}
+
 .scroll-navigation__button {
   position: relative;
   display: inline-flex;
@@ -1099,6 +1120,10 @@ html.portfolio-ready .cinema-hero__subject {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .scroll-navigation__progress-edge {
+    transition: none;
+  }
+
   .certificate-story__preview img,
   .certificate-story__overlay {
     transition: none;

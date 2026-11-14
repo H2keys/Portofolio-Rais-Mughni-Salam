@@ -123,6 +123,10 @@ export function LanguageProvider({ children }) {
 
         const incomingElements = getTextAnimationTargets();
         animatedElementsRef.current = incomingElements;
+        if (!incomingElements.length) {
+          return;
+        }
+
         const incomingTimeline = gsap.timeline({
           onComplete: () => {
             clearAnimationStyles(incomingElements);
