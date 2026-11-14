@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useTranslation } from 'react-i18next';
 import { Container } from '../components/common/Container';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { education } from '../data/education';
 import { experience } from '../data/experience';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -12,7 +11,7 @@ import { getLocalizedProjectText } from '../utils/projectContent';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export function JourneySection({ showNavigation = true }) {
+export function JourneySection() {
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage || i18n.language;
   const reducedMotion = useReducedMotion();
@@ -64,7 +63,6 @@ export function JourneySection({ showNavigation = true }) {
           {renderTimeline(t('about.experience'), experience, 'experience')}
         </div>
       </Container>
-      {showNavigation && <ScrollNavigation targetId="skills-story" labelKey="home.continueSkills" />}
     </section>
   );
 }

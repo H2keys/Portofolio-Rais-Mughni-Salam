@@ -25,10 +25,7 @@ export function useLenis() {
     const tick = (time) => lenis.raf(time * 1000);
     const handleScrollLock = (event) => {
       if (event.detail?.locked) lenis.stop();
-      else {
-        lenis.start();
-        window.requestAnimationFrame(() => ScrollTrigger.refresh());
-      }
+      else lenis.start();
     };
     const handleScrollToTop = (event) => {
       event.preventDefault();
@@ -68,11 +65,6 @@ export function useLenis() {
       lenis.destroy();
     };
   }, [reducedMotion]);
-
-  useEffect(() => {
-    const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => window.cancelAnimationFrame(refreshFrame);
-  }, [location.pathname]);
 
   useEffect(() => {
     if (reducedMotion) return;

@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useTranslation } from 'react-i18next';
 import { Container } from '../components/common/Container';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { CertificateLightbox } from '../components/projects/CertificateLightbox';
 import { certificates } from '../data/certificates';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -28,7 +27,8 @@ export function CertificateShowcase() {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: 'top 72%',
-        toggleActions: 'play none none reverse',
+        toggleActions: 'play none none none',
+        once: true,
       },
     });
 
@@ -119,8 +119,6 @@ export function CertificateShowcase() {
           </div>
         </div>
       </Container>
-      <ScrollNavigation targetId="contact-scene" labelKey="home.continueContact" />
-
       <CertificateLightbox
         isOpen={lightboxOpen}
         certificates={formattedCertificates}

@@ -6,7 +6,6 @@ import { useGSAP } from '@gsap/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Container } from '../components/common/Container';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { projects } from '../data/projects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -79,7 +78,6 @@ export function ScrollGallery() {
           ))}
         </div>
       </Container>
-      <ScrollNavigation targetId="contact-scene" labelKey="home.continueContact" />
     </section>
   );
 }

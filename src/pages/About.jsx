@@ -16,7 +16,7 @@ export default function About() {
   const language = i18n.resolvedLanguage || i18n.language;
 
   return (
-    <PageTransition keyName="about">
+    <PageTransition>
       <PageHeader
         backTo="/"
         backLabelKey="common.backHome"

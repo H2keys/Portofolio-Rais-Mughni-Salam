@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowDown, RotateCcw } from 'lucide-react';
+import { ArrowDown, ArrowRight, RotateCcw } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -12,22 +13,55 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export function ScrollNavigation({ targetId, labelKey, replay = false }) {
+export function ScrollNavigation({ targetId, labelKey, replay = false, to, alwaysVisible = false }) {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
+  const navigateToRoute = useNavigate();
   const slotRef = useRef(null);
+  const popupRef = useRef(null);
   const instanceId = useId();
-  const [visible, setVisible] = useState(false);
-  const Icon = replay ? RotateCcw : ArrowDown;
+  const [visible, setVisible] = useState(alwaysVisible);
+  const [pointerNear, setPointerNear] = useState(false);
+  const Icon = to ? ArrowRight : replay ? RotateCcw : ArrowDown;
 
   useEffect(() => {
-    const handleActiveNavigation = (event) => setVisible(event.detail?.owner === instanceId);
+    if (alwaysVisible) return undefined;
+
+    const handleActiveNavigation = (event) => {
+      const active = event.detail?.owner === instanceId;
+      setVisible(active);
+      if (!active) setPointerNear(false);
+    };
     document.addEventListener('porto:scroll-navigation-active', handleActiveNavigation);
     return () => document.removeEventListener('porto:scroll-navigation-active', handleActiveNavigation);
-  }, [instanceId]);
+  }, [alwaysVisible, instanceId]);
+
+  useEffect(() => {
+    if (!visible) return undefined;
+
+    const handlePointerMove = (event) => {
+      const bounds = popupRef.current?.getBoundingClientRect();
+      if (!bounds) return;
+
+      const proximity = 64;
+      const near = event.clientX >= bounds.left - proximity
+        && event.clientX <= bounds.right + proximity
+        && event.clientY >= bounds.top - proximity
+        && event.clientY <= bounds.bottom + proximity;
+      setPointerNear(near || popupRef.current.contains(document.activeElement));
+    };
+    const handleWindowLeave = () => setPointerNear(popupRef.current?.contains(document.activeElement) ?? false);
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerleave', handleWindowLeave);
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerleave', handleWindowLeave);
+    };
+  }, [visible]);
 
   useGSAP(() => {
-    if (!slotRef.current) return;
+    if (alwaysVisible || !slotRef.current) return;
 
     ScrollTrigger.create({
       trigger: slotRef.current,
@@ -41,34 +75,31 @@ export function ScrollNavigation({ targetId, labelKey, replay = false }) {
         setVisible(true);
         document.dispatchEvent(new CustomEvent('porto:scroll-navigation-active', { detail: { owner: instanceId } }));
       },
-      onLeave: () => setVisible(false),
-      onLeaveBack: () => setVisible(false),
+      onLeave: () => {
+        setVisible(false);
+        setPointerNear(false);
+      },
+      onLeaveBack: () => {
+        setVisible(false);
+        setPointerNear(false);
+      },
       invalidateOnRefresh: true,
     });
-  }, { scope: slotRef, dependencies: [instanceId, replay], revertOnUpdate: true });
+  }, { scope: slotRef, dependencies: [alwaysVisible, instanceId, replay], revertOnUpdate: true });
 
   const navigate = () => {
+    if (to) {
+      navigateToRoute(to);
+      return;
+    }
+
     const target = document.getElementById(targetId);
-    if (!target) return;
+    if (!target) {
+      navigateToRoute('/');
+      return;
+    }
 
-    const revealTargetText = () => {
-      if (!reducedMotion && targetId !== 'hero-scene') {
-        const textElements = target.querySelectorAll('h1, h2, h3, p');
-        gsap.fromTo(textElements, {
-          opacity: 0,
-          y: 18,
-          filter: 'blur(4px)',
-        }, {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          duration: 0.55,
-          stagger: 0.065,
-          ease: 'power3.out',
-          clearProps: 'opacity,transform,filter',
-        });
-      }
-
+    const focusTarget = () => {
       target.focus({ preventScroll: true });
     };
 
@@ -77,30 +108,36 @@ export function ScrollNavigation({ targetId, labelKey, replay = false }) {
       detail: {
         targetId,
         duration: replay ? 2.4 : 2,
-        onComplete: revealTargetText,
+        onComplete: focusTarget,
       },
     });
     const handled = !document.dispatchEvent(event);
 
     if (!handled) {
       target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-      if (reducedMotion) target.focus({ preventScroll: true });
-      else document.addEventListener('scrollend', revealTargetText, { once: true });
+      if (reducedMotion) focusTarget();
+      else document.addEventListener('scrollend', focusTarget, { once: true });
     }
   };
 
   return (
     <>
-      <div ref={slotRef} className="scroll-navigation-slot" aria-hidden="true" />
+      {!alwaysVisible && <div ref={slotRef} className="scroll-navigation-slot" aria-hidden="true" />}
       {typeof document !== 'undefined' && createPortal(
         <AnimatePresence initial={false}>
           {visible && (
             <motion.div
+              ref={popupRef}
               key="scroll-navigation"
               initial={reducedMotion ? false : { opacity: 0, y: 18, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              animate={{ opacity: pointerNear ? 1 : 0.6, y: 0, scale: 1 }}
               exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -12, scale: 0.98 }}
-              transition={{ duration: reducedMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                opacity: { duration: reducedMotion ? 0 : 0.25, ease: 'easeOut' },
+                y: { duration: reducedMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] },
+                scale: { duration: reducedMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] },
+              }}
+              onFocusCapture={() => setPointerNear(true)}
               className="scroll-navigation"
             >
               <button type="button" onClick={navigate} className="scroll-navigation__button" aria-label={t(labelKey)}>

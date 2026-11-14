@@ -9,7 +9,7 @@ import { ContactCTA } from '../sections/ContactCTA';
 
 export default function Home() {
   return (
-    <PageTransition keyName="home">
+    <PageTransition>
       <Hero />
       <AboutPreview />
       <JourneySection />

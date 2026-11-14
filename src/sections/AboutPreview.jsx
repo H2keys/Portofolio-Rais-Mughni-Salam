@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { Container } from '../components/common/Container';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { siteConfig } from '../data/siteConfig';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -65,7 +64,6 @@ export function AboutPreview() {
           <Link to="/about" className="about-story__link"><Button variant="secondary">{t('common.readMore')}</Button></Link>
         </div>
       </Container>
-      <ScrollNavigation targetId="journey-story" labelKey="home.continueJourney" />
     </section>
   );
 }

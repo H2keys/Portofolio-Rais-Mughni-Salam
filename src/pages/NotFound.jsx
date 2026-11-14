@@ -8,7 +8,7 @@ export default function NotFound() {
   const { t } = useTranslation();
 
   return (
-    <PageTransition keyName="not-found">
+    <PageTransition>
       <PageHeader
         backTo="/"
         backLabelKey="common.backHome"

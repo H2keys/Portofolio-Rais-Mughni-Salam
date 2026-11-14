@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { socialLinks } from '../../data/socialLinks';
@@ -18,6 +18,7 @@ export function MenuOverlay({ onClose, triggerRef }) {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const overlayRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const previousFocus = triggerRef?.current ?? document.activeElement;
@@ -60,12 +61,20 @@ export function MenuOverlay({ onClose, triggerRef }) {
       aria-modal="true"
       aria-label={t('nav.navigationDialog')}
       initial={reducedMotion ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: reducedMotion ? 0 : 0.25 }}
+      animate={{ opacity: 1, transition: { duration: reducedMotion ? 0 : 0.3, ease: 'easeOut' } }}
+      exit={{ opacity: 0, transition: { duration: reducedMotion ? 0 : 0.25, ease: 'easeOut' } }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="fixed inset-0 z-50 bg-[#090909] px-5 py-6 sm:px-8"
     >
-      <nav aria-label={t('nav.navigationDialog')} className="mx-auto flex h-full max-w-7xl flex-col justify-between">
+      <nav
+        aria-label={t('nav.navigationDialog')}
+        className="mx-auto flex h-full max-w-7xl flex-col justify-between"
+        style={{
+          opacity: isHovered ? 1 : 0.6,
+          transition: reducedMotion ? 'none' : 'opacity 250ms ease',
+        }}
+      >
         <div className="flex items-center justify-between">
           <div className="text-xs uppercase tracking-[0.25em] text-[#d5c7a7]">{siteConfig.brandName}</div>
           <button type="button" onClick={onClose} aria-label={t('common.close')} className="rounded-full border border-white/10 px-3 py-2 text-xs uppercase tracking-[0.2em] text-[#f0ece5]">
@@ -75,16 +84,16 @@ export function MenuOverlay({ onClose, triggerRef }) {
 
         <div className="space-y-4 py-10">
           {menuItems.map((item, index) => (
-            <motion.div key={item.to} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.07 }}>
+            <div key={item.to}>
               <NavLink
                 to={item.to}
                 onClick={onClose}
                 className="group flex items-center justify-between border-b border-white/10 py-3 text-3xl font-medium tracking-[-0.06em] text-[#f7f4f1] sm:text-5xl"
               >
                 <span>{t(item.key)}</span>
-                <span className="text-xs uppercase tracking-[0.3em] text-[#d6a15b]">0{index + 1}</span>
+                <span data-no-lang-anim className="text-xs uppercase tracking-[0.3em] text-[#d6a15b]">0{index + 1}</span>
               </NavLink>
-            </motion.div>
+            </div>
           ))}
         </div>
 

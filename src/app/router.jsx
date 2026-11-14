@@ -6,9 +6,9 @@ import ProjectDetail from '../pages/ProjectDetail';
 import Contact from '../pages/Contact';
 import NotFound from '../pages/NotFound';
 
-export function Router() {
+export function Router({ location }) {
   return (
-    <Routes>
+    <Routes location={location}>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/projects" element={<Projects />} />

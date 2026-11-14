@@ -9,7 +9,7 @@ export default function Contact() {
   const { t } = useTranslation();
 
   return (
-    <PageTransition keyName="contact">
+    <PageTransition>
       <PageHeader
         backTo="/"
         backLabelKey="common.backHome"

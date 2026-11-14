@@ -19,7 +19,7 @@ export default function ProjectDetail() {
 
   if (!project) {
     return (
-      <PageTransition keyName="project-not-found">
+      <PageTransition>
         <PageHeader
           backTo="/projects"
           backLabelKey="common.backProjects"
@@ -66,7 +66,7 @@ export default function ProjectDetail() {
   ];
 
   return (
-    <PageTransition keyName={project.slug}>
+    <PageTransition>
       <PageHeader
         backTo="/projects"
         backLabelKey="common.backProjects"

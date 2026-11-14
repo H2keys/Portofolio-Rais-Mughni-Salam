@@ -7,7 +7,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Button } from '../components/common/Button';
 import { Container } from '../components/common/Container';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { siteConfig } from '../data/siteConfig';
 import { SocialLinks } from '../components/common/SocialLinks';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -49,7 +48,6 @@ export function ContactCTA() {
           <SocialLinks className="contact-scene__socials" />
         </div>
       </Container>
-      <ScrollNavigation targetId="hero-scene" labelKey="home.replayJourney" replay />
     </section>
   );
 }

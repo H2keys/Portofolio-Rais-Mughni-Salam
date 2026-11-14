@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Container } from '../components/common/Container';
 import { ProjectPreview } from '../components/projects/ProjectPreview';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { projects } from '../data/projects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { getLocalizedProjectText } from '../utils/projectContent';
@@ -91,7 +90,6 @@ export function FeaturedProjects() {
         <span>{t('home.projectScrollHint')}</span>
         <Link to="/projects">{t('home.allProjects')} <ArrowUpRight size={15} aria-hidden="true" /></Link>
       </Container>
-      <ScrollNavigation targetId="certificate-story" labelKey="home.continueCertificates" />
     </section>
   );
 }

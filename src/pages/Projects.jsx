@@ -23,7 +23,7 @@ export default function Projects() {
   const visibleProjects = activeCategory === 'all' ? projects : projects.filter((project) => project.categoryId === activeCategory);
 
   return (
-    <PageTransition keyName="projects">
+    <PageTransition>
       <PageHeader
         backTo="/"
         backLabelKey="common.backHome"

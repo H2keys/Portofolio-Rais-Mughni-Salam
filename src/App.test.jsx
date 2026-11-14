@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import App from './app/App';
 import en from './locales/en/translation.json';
 import id from './locales/id/translation.json';
@@ -41,6 +41,15 @@ describe('portfolio app', () => {
     screen.getAllByRole('img', { name: 'Rais Mughni Salam, programmer dan pengembang web' }).forEach((image) => {
       expect(image).toHaveAttribute('src', '/profile/rais-dark-background.jpg');
     });
+    let scrollRequest;
+    const handleScrollTo = (event) => {
+      event.preventDefault();
+      scrollRequest = event.detail;
+    };
+    document.addEventListener('porto:scroll-to', handleScrollTo, { once: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Mulai Perjalanan' }));
+    expect(scrollRequest).toEqual({ targetId: 'about-story' });
+
     ['Pengembangan Web Front-End', 'Vibe Coding', 'React.js', 'Python', 'Microsoft Office', 'Visualisasi Data', 'Analisis Data', 'UI/UX'].forEach((skill) => {
       expect(screen.getByText(skill)).toBeInTheDocument();
     });
@@ -82,9 +91,17 @@ describe('portfolio app', () => {
     fireEvent.click(screen.getByRole('link', { name: /Jelajahi semua proyek/i }));
     expect(await screen.findByRole('heading', { name: /Proyek pilihan/i })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /Lihat proyek:/i })).toHaveLength(2);
+    expect(screen.getByRole('button', { name: 'Hubungi saya' })).toBeInTheDocument();
+    fireEvent.click(within(document.querySelector('.scroll-navigation')).getByRole('button', { name: 'Hubungi saya' }));
+    expect(await screen.findByRole('heading', { name: 'Kontak' })).toBeInTheDocument();
+    fireEvent.click(within(document.querySelector('.scroll-navigation')).getByRole('button', { name: 'Kembali ke beranda' }));
+    expect(await screen.findByRole('heading', { name: /Rais Mughni Salam/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('link', { name: /Jelajahi semua proyek/i }));
+    expect(await screen.findByRole('heading', { name: /Proyek pilihan/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('link', { name: /Lihat proyek: Dashboard Analisis Sentimen MyPertamina/i }));
     expect(await screen.findByRole('heading', { name: /Dashboard Analisis Sentimen MyPertamina/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Kembali ke proyek' })).toBeInTheDocument();
     await waitFor(() => {
       expect(document.title).toBe('Dashboard Analisis Sentimen MyPertamina | Rais Mughni Salam');
       expect(document.querySelector('meta[property="og:type"]')).toHaveAttribute('content', 'article');
@@ -92,10 +109,11 @@ describe('portfolio app', () => {
     });
     expect(screen.getByText('Perbesar pratinjau')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Navigasi halaman' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'en' }));
-    expect(screen.getByText('Zoom preview')).toBeInTheDocument();
+    fireEvent.click(within(document.querySelector('.scroll-navigation')).getByRole('button', { name: 'en' }));
+    expect(await screen.findByText('Zoom preview')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Breadcrumb navigation' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'id' }));
+    fireEvent.click(within(document.querySelector('.scroll-navigation')).getByRole('button', { name: 'id' }));
+    expect(await screen.findByText('Lihat demo langsung')).toBeInTheDocument();
     expect(screen.getByText('2026')).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /Lihat demo langsung/i }).some((link) => (
       link.getAttribute('href') === 'https://my-pertamina-dashboard-analisis.vercel.app/'
@@ -110,7 +128,7 @@ describe('portfolio app', () => {
       link.getAttribute('href') === 'https://berkah-mandiri-plastik-zeta.vercel.app/'
     ))).toBe(true);
 
-    fireEvent.click(screen.getByRole('button', { name: 'en' }));
+    fireEvent.click(within(document.querySelector('.scroll-navigation')).getByRole('button', { name: 'en' }));
     expect(await screen.findByRole('heading', { name: /Berkah Mandiri Plastik Promotion Website/i })).toBeInTheDocument();
     await waitFor(() => {
       expect(document.title).toBe('Berkah Mandiri Plastik Promotion Website | Rais Mughni Salam');
@@ -122,7 +140,9 @@ describe('portfolio app', () => {
     expect(await screen.findByRole('heading', { name: /Rais Mughni Salam/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('link', { name: /About me/i }));
     expect(await screen.findByText('Bachelor of Informatics')).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: 'Rais Mughni Salam, programmer and web developer' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Explore projects' })).toBeInTheDocument();
+    expect(await screen.findAllByText('Social Media')).toHaveLength(2);
+    expect(screen.getAllByRole('img', { name: 'Rais Mughni Salam, programmer and web developer' }).length).toBeGreaterThan(0);
     expect(screen.getByText('Data Analysis')).toBeInTheDocument();
     expect(screen.getAllByText('Experience').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Education').length).toBeGreaterThan(0);
@@ -137,7 +157,7 @@ describe('portfolio app', () => {
     render(<App />);
 
     expect(await screen.findAllByRole('heading', { name: 'Proyek tidak ditemukan' })).toHaveLength(2);
-    fireEvent.click(screen.getByRole('button', { name: 'en' }));
+    fireEvent.click(within(document.querySelector('.scroll-navigation')).getByRole('button', { name: 'en' }));
     expect(await screen.findAllByRole('heading', { name: 'Project not found' })).toHaveLength(2);
   });
 });

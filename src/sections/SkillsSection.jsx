@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useTranslation } from 'react-i18next';
 import { Container } from '../components/common/Container';
-import { ScrollNavigation } from '../components/common/ScrollNavigation';
 import { interests, skills } from '../data/skills';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { getLocalizedProjectText } from '../utils/projectContent';
@@ -55,7 +54,6 @@ export function SkillsSection() {
           ))}
         </ul>
       </Container>
-      <ScrollNavigation targetId="project-story" labelKey="home.continueProjects" />
     </section>
   );
 }

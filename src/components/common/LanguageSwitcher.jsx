@@ -6,7 +6,7 @@ export function LanguageSwitcher() {
   const { t } = useTranslation();
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1">
+    <div className="language-switcher inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1">
       <span className="sr-only">{t('nav.language')}</span>
       {['id', 'en'].map((lng) => (
         <button
